@@ -1,3 +1,12 @@
+#Собрать пакет datacentric-debuild
+```bash
+git clone https://github.com/DataCentricAlliance/debuilder.git
+cd debuilder/debuilder
+sudo apt-get install debhelper devscripts python-opster python-debian python-tz
+./deb.py build
+#пакет будет лежать в папке build
+```
+
 #Настройка окружения
 
 ```bash
