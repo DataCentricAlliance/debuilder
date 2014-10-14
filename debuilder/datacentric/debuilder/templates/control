@@ -1,0 +1,16 @@
+Source: $name
+Maintainer: $maintainer
+Section: $section
+Priority: optional
+Standards-Version: $version
+Build-depends: $build_depends
+
+Package: $name
+Architecture: $architecture
+Section: $section
+Priority: optional
+Depends: $depends
+Description: $description
+Provides: $provide
+Conflicts: $conflicts
+ 
