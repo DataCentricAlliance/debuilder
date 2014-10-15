@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Debuilder : deb">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Debuilder</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/DataCentricAlliance/debuilder">View on GitHub</a>
+
+          <h1 id="project_title">Debuilder</h1>
+          <h2 id="project_tagline">deb</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/DataCentricAlliance/debuilder/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/DataCentricAlliance/debuilder/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="%D0%A1%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D1%8C-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-datacentric-debuild" class="anchor" href="#%D0%A1%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D1%8C-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-datacentric-debuild"><span class="octicon octicon-link"></span></a>Собрать пакет datacentric-debuild</h1>
+
+<div class="highlight highlight-bash"><pre>git clone https://github.com/DataCentricAlliance/debuilder.git
+<span class="nb">cd </span>debuilder/debuilder
+sudo apt-get install debhelper devscripts python-opster python-debian python-tz
+./deb.py build
+<span class="c">#пакет будет лежать в папке build</span>
+</pre></div>
+
+<h1>
+<a name="%D0%9D%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BE%D0%BA%D1%80%D1%83%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F" class="anchor" href="#%D0%9D%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BE%D0%BA%D1%80%D1%83%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F"><span class="octicon octicon-link"></span></a>Настройка окружения</h1>
+
+<div class="highlight highlight-bash"><pre><span class="c">#устанавливаем пакет datacentric-debuild</span>
+sudo apt-get install datacentric-debuild
+
+<span class="c">#устанавливаем переменные окружения</span>
+<span class="nb">export </span><span class="nv">DEBEMAIL</span><span class="o">=</span><span class="s2">"i.ivanov@datacentric.ru"</span>
+<span class="nb">export </span><span class="nv">DEBFULLNAME</span><span class="o">=</span><span class="s2">"Ivan Ivanov"</span>
+<span class="nb">export </span><span class="nv">DEBREPOSITORY</span><span class="o">=</span><span class="s2">"example.repo.net:/opt/ubuntu/mini-dinstall/incoming/"</span>
+</pre></div>
+
+<h1>
+<a name="%D0%A3%D0%B2%D0%B5%D0%BB%D0%B8%D1%87%D0%B8%D1%82%D1%8C-%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8E-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%B0" class="anchor" href="#%D0%A3%D0%B2%D0%B5%D0%BB%D0%B8%D1%87%D0%B8%D1%82%D1%8C-%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8E-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%B0"><span class="octicon octicon-link"></span></a>Увеличить версию пакета</h1>
+
+<div class="highlight highlight-bash"><pre><span class="c">#добавили запись в changelog и собрали с новой версией</span>
+./deb.py build -v &lt;maj<span class="p">|</span>min<span class="p">|</span>mntn<span class="p">|</span>build&gt; -m &lt;message&gt;
+
+<span class="c">#changelog надо закоммитить (лучше вместе с остальными изменениями пакета)</span>
+git commit -a -m <span class="s2">"теперь точно всё работает"</span>
+
+<span class="c">#мержим ветку через gitlab</span>
+git push origin ...
+
+<span class="c">#кладём пакет в репозиторий</span>
+./deb.py pub
+</pre></div>
+
+<h1>
+<a name="%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%B0" class="anchor" href="#%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%B0"><span class="octicon octicon-link"></span></a>Создание пакета</h1>
+
+<div class="highlight highlight-bash"><pre><span class="c">#создаём папку где будет лежать наш проект</span>
+mkdir mypackage
+<span class="nb">cd </span>mkdir
+
+<span class="c">#создаём папку debian, changelog и файл deb.py</span>
+<span class="c">#в папку debian нужно класть post/pre скрипты</span>
+mkdir debian
+touch debian/changelog
+touch deb.py
+chmod a+x deb.py
+
+<span class="c">#добавляем всё в git</span>
+git add *
+
+<span class="c">#редактируем файл deb.py, смотреть "Описание deb.py"</span>
+vim deb.py
+
+<span class="c">#добавляем запись в changelog и собираем пакет</span>
+./deb.py build -v min -m <span class="s2">"Initial release"</span>
+
+<span class="c">#коммитим, проходим ревью, мёржим</span>
+git commit -a -m <span class="s2">"add new package mypackage"</span>
+
+<span class="c">#отправляем пакет в репозиторий</span>
+./deb.py pub
+</pre></div>
+
+<h1>
+<a name="%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-debpy" class="anchor" href="#%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-debpy"><span class="octicon octicon-link"></span></a>Описание deb.py</h1>
+
+<p>Пример:</p>
+
+<div class="highlight highlight-python"><pre><span class="err">!</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">python</span>
+
+<span class="kn">from</span> <span class="nn">facetz.utils.debuild</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">dispatch</span><span class="p">(</span>
+    <span class="n">Package</span><span class="p">(</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">"mypackage"</span><span class="p">,</span>
+        <span class="n">section</span> <span class="o">=</span> <span class="s">"facetz"</span><span class="p">,</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s">"Tool that is never falls"</span><span class="p">,</span>
+        <span class="n">depends</span> <span class="o">=</span> <span class="s">"python-pymongo"</span><span class="p">,</span>
+        <span class="n">conflicts</span> <span class="o">=</span> <span class="s">"myoldpackage"</span><span class="p">,</span>
+
+        <span class="n">commands</span> <span class="o">=</span> <span class="p">[</span><span class="n">Copy</span><span class="p">([</span><span class="s">"mypackage.*.cfg"</span><span class="p">],</span> <span class="s">"/etc/mypackage/"</span><span class="p">),</span>
+                    <span class="n">EnvLink</span><span class="p">(</span><span class="s">"/etc/mypackage/mypackage.$ENV.cfg"</span><span class="p">,</span> <span class="s">"/etc/mypackage/mypackage.cfg"</span><span class="p">),</span>
+                    <span class="n">Copy</span><span class="p">([</span><span class="s">"tool.py"</span><span class="p">,</span> <span class="s">"common.py"</span><span class="p">],</span> <span class="s">"/opt/facetz/mypackage/"</span><span class="p">)</span>              
+                    <span class="n">Mkdir</span><span class="p">(</span><span class="s">"/var/log/facetz/mypackage"</span><span class="p">)]</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+
+<ul>
+<li>dispatch - нужен для разбора коммандной строки</li>
+<li>
+<p>Package - класс содержащий описание пакета:</p>
+
+<ul>
+<li>name - имя пакета</li>
+<li>section - секция пакета <a href="https://www.debian.org/doc/debian-policy/ch-archive.html#s-subsections">https://www.debian.org/doc/debian-policy/ch-archive.html#s-subsections</a>
+</li>
+<li>description - описание пакета</li>
+<li>depends - зависимости от других deb-пакетов</li>
+<li>conflicts - конфликты с другими deb-пакетами</li>
+<li>provides - для виртуальных пакетов</li>
+<li>
+<p>commands - команды сборщику пакета:</p>
+
+<ul>
+<li>Copy(wildcards, dest) - копирует файлы/папки в dest. Если dest заканчивается на '/' то копирует в папку dest. Если dest не заканчивается '/' то считается что при копировании вы хотите переименовать файл и он будет скопирован в папку dirname(dest) и назван basename(dest)</li>
+<li>Copy(["myconf.cfg"], "/etc/facetz/tool/tool.cfg") - файл myconf.cfg будет скопирован в папку /etc/facetz/tool и переименован в tool.cfg</li>
+<li>Copy(["myconf.cfg"], "/etc/facetz/tool/") - файл myconf.cfg будет скопирован в папку /etc/facetz/tool и не будет переименован</li>
+<li>Copy(["conf"], "/etc/facetz/tool") - если conf - это папка то она будет переименована в tool и скопирована в /etc/facetz</li>
+<li><p>Mkdir(dir_name, user=root, group=root) - создаст папку dir_name, добавляет chown user:group dir в postrm скрипт</p></li>
+<li><p>EnvLink(pattern, link_name=None) - Если у нас разные конфиги для каждого из окружений, к примеру tool.development.cfg, tool.testing.cfg, tool.production.cfg, чтобы не создавать три пакета с каждым из этих конфигов, можно использовать EnvLink. Для этого нужно положить все конфиги в один пакет командой Copy а затем создать ссылку на конфиг с помощью EnvLink.</p></li>
+</ul>
+
+<div class="highlight highlight-python"><pre><span class="c">#Для нашего примера</span>
+<span class="n">Copy</span><span class="p">([</span><span class="s">"tool.*.cfg"</span><span class="p">],</span> <span class="s">"/etc/facetz/tool/"</span><span class="p">)</span>
+<span class="n">EnvLink</span><span class="p">(</span><span class="s">"/etc/facetz/tool/tool.$ENV.cfg"</span><span class="p">,</span> <span class="s">"/etc/facetz/tool/tool.cfg"</span><span class="p">)</span>
+</pre></div>
+
+<p>EnvLink создаст символьную ссылку /etc/facetz/tool/tool.cfg -&gt; /etc/facetz/tool/tool.development.cfg если на машине установлен пакет facetz-env-development или /etc/facetz/tool/tool.cfg -&gt; /etc/facetz/tool/tool.production.cfg если на машине стоит пакет facetz-env-production. Таки образом мы можем в нашей программе использовать один путь для всех конфигов "/etc/facetz/too/tool.cfg", а какой именно конфиг будет подключем определяется созданной в момент установки пакета ссылкой.
+Как это работает? Есть пакеты окружения facez-env-development, facetz-env-testing, facetz-env-production и виртуальный пакет facetz-env. Каждый из них устанавливает на машину файл /etc/facetz/env/env.cfg который содержит одну строчку "development", "testing" или "production". На машине может стоять только один из них. Команда EnvLink добавляет в postinst скрипт две строки:</p>
+
+<div class="highlight highlight-bash"><pre><span class="nv">ENV</span><span class="o">=</span><span class="k">$(</span>cat /etc/facetz/env/env.cfg<span class="k">)</span>
+ln -sf &lt;pattern&gt; &lt;link_name&gt;
+</pre></div>
+
+<p>и в postrm скрипт:</p>
+
+<div class="highlight highlight-bash"><pre>extra_portrm
+rm -rf &lt;link_name&gt;
+</pre></div>
+</li>
+</ul>
+</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Debuilder maintained by <a href="https://github.com/DataCentricAlliance">DataCentricAlliance</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
